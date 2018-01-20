@@ -29,36 +29,39 @@ public class Application
         List<List<Integer>> adjacencyList = getAdjacencyList();
         printAdjacencyList(adjacencyList);
         
-        boolean[] unexplored = new boolean[adjacencyList.size()];
+        boolean[] processed = new boolean[adjacencyList.size()];
         int numberOfComponents = 0;
 
-        for(int i=0; i < unexplored.length; i++) {
-            if (!unexplored[i]) {
+        for(int i=0; i < processed.length; i++) {
+            if (!processed[i]) {
                 numberOfComponents++;
-                findConnectedComponentsByBreathFirstSearch(adjacencyList, unexplored, i);
+                findConnectedComponentsByBreathFirstSearch(adjacencyList, processed, i);
             }
         } 
-        System.out.println(numberOfComponents);
+        System.out.println("Number of connected components: " + numberOfComponents);
     }
 
-    public static void findConnectedComponentsByBreathFirstSearch(List<List<Integer>> adjacencyList, boolean[] unexplored, int start) {
+    public static void findConnectedComponentsByBreathFirstSearch(List<List<Integer>> adjacencyList, boolean[] processed, int start) {
         boolean[] visited = new boolean[adjacencyList.size()];
         Queue<Integer> queue = new LinkedList<Integer>();
         queue.add(start);
         visited[start] = true;
-        unexplored[start] = true;
+        processed[start] = true;
+        int numberOfVertices = 0;
 
         while(!queue.isEmpty()) {
+            numberOfVertices++;
             Integer current = queue.remove();
             for(Integer vertex : adjacencyList.get(current)) {
                 if (!visited[vertex]) {
                     queue.add(vertex);
                 }
                 visited[vertex] = true;
-                unexplored[vertex] = true;
+                processed[vertex] = true;
             }
         } 
            
+        System.out.println("Number of vertices found: " + numberOfVertices);
     }
 
     public static  List<List<Integer>> getAdjacencyList() {
