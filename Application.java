@@ -1,6 +1,8 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Application
 {
@@ -26,12 +28,37 @@ public class Application
     public static void main(String[] args) {
         List<List<Integer>> adjacencyList = getAdjacencyList();
         printAdjacencyList(adjacencyList);
+        
+        boolean[] unexplored = new boolean[adjacencyList.size()];
+        int numberOfComponents = 0;
 
-        findConnectedComponentsByBreathFirstSearch(adjacencyList);
+        for(int i=0; i < unexplored.length; i++) {
+            if (!unexplored[i]) {
+                numberOfComponents++;
+                findConnectedComponentsByBreathFirstSearch(adjacencyList, unexplored, i);
+            }
+        } 
+        System.out.println(numberOfComponents);
     }
 
-    public static void findConnectedComponentsByBreathFirstSearch(List<List<Integer>> adjacencyList) {
-        
+    public static void findConnectedComponentsByBreathFirstSearch(List<List<Integer>> adjacencyList, boolean[] unexplored, int start) {
+        boolean[] visited = new boolean[adjacencyList.size()];
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.add(start);
+        visited[start] = true;
+        unexplored[start] = true;
+
+        while(!queue.isEmpty()) {
+            Integer current = queue.remove();
+            for(Integer vertex : adjacencyList.get(current)) {
+                if (!visited[vertex]) {
+                    queue.add(vertex);
+                }
+                visited[vertex] = true;
+                unexplored[vertex] = true;
+            }
+        } 
+           
     }
 
     public static  List<List<Integer>> getAdjacencyList() {
